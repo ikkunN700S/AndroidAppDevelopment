@@ -1,11 +1,14 @@
 package jp.ac.meijou.android.s231205183;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.widget.TextView;
+import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -30,5 +33,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         binding.text.setText(R.string.text2);
+
+        var icon = ContextCompat.getDrawable(this, R.drawable.ic_android_black_24dp);
+        binding.imageView2.setImageDrawable(icon);
     }
 }
