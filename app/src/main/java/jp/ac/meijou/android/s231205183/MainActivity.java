@@ -75,9 +75,17 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    // 立ち上がるとき
     protected void onStart(){
         super.onStart();
         prefDataStore.getString("name")
                 .ifPresent((name -> binding.text.setText(name)));
+    }
+
+    // 閉じられるとき
+    protected void onStop(){
+        super.onStop();
+        var text = binding.editTextText.getText().toString();
+        prefDataStore.setString("name", text);
     }
 }
