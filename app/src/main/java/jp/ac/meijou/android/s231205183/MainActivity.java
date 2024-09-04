@@ -2,7 +2,9 @@ package jp.ac.meijou.android.s231205183;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.ResultReceiver;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.TextView;
@@ -72,6 +74,26 @@ public class MainActivity extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
                 binding.text.setText(editable.toString());
             }
+        });
+
+        // Intent取得
+        Intent intent = getIntent();
+        String import_text = intent.getStringExtra("data");
+        // 受け取ったテキストを表示
+        binding.textView.setText(import_text);
+
+        // OKボタン
+        binding.buttonOk.setOnClickListener(view ->{
+            var intent_1 = new Intent();
+            intent.putExtra("ret", "OK");
+            setResult(RESULT_OK, intent_1);
+            finish();
+        });
+
+        // Cancelボタン
+        binding.buttonCancel.setOnClickListener(view ->{
+            setResult(RESULT_CANCELED);
+            finish();
         });
     }
 
