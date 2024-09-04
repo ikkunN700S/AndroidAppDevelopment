@@ -100,12 +100,12 @@
 
     <Button
         android:id="@+id/button_back"
-        android:text="<-"
+        android:text="←"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="35dp"
         app:layout_constraintBottom_toTopOf="@+id/button_minus"
-        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/button_divide"
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <Button
@@ -209,7 +209,7 @@
 
     <Button
         android:id="@+id/button_equal"
-        android:text="="
+        android:text="＝"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="35dp"
@@ -220,7 +220,7 @@
 
     <Button
         android:id="@+id/button_plus"
-        android:text="+"
+        android:text="＋"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="35dp"
@@ -231,7 +231,7 @@
 
     <Button
         android:id="@+id/button_minus"
-        android:text="-"
+        android:text="ー"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="35dp"
