@@ -1,44 +1,41 @@
 package jp.ac.meijou.android.s231205183;
 
 import android.app.Activity;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.BitmapCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.squareup.moshi.JsonAdapter;
-import com.squareup.moshi.Moshi;
 
 import java.io.IOException;
-import java.util.Optional;
 
-import jp.ac.meijou.android.s231205183.databinding.ActivityMain4Binding;
+import jp.ac.meijou.android.s231205183.databinding.ActivityMain5Binding;
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.OkHttp;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class MainActivity4 extends AppCompatActivity {
+public class MainActivity5 extends AppCompatActivity {
 
     private final OkHttpClient okHttpClient = new OkHttpClient();
 
-    private final Moshi moshi = new Moshi.Builder().build();
-
-    private final JsonAdapter<Gist> gistJsonAdapter = moshi.adapter(Gist.class);
-
-    private ActivityMain4Binding binding;
+    private ActivityMain5Binding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        binding = ActivityMain4Binding.inflate(getLayoutInflater());
+        binding = ActivityMain5Binding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -46,8 +43,23 @@ public class MainActivity4 extends AppCompatActivity {
             return insets;
         });
 
+        binding.button.setOnClickListener(view ->{
+            binding.progress.setVisibility(View.VISIBLE);
+            var text = binding.editText.getText().toString();
+            var url = Uri.parse("https://placehold.jp/350x350.png")
+                    .buildUpon()
+                    .appendQueryParameter("text", text)
+                    .build()
+                    .toString();
+            getImage(url);
+        });
+
+        // getImage("https://placehold.jp/2aade5/ffffff/450x450.png?text=%E3%81%93%E3%82%8C%E3%81%AF%E7%94%BB%E5%83%8F%E3%81%A0%E3%82%88&css=%7B%22border-radius%22%3A%2230px%22%2C%22background%22%3A%22%20-webkit-gradient(linear%2C%20left%20top%2C%20left%20bottom%2C%20from(%232aade5)%2C%20to(%23ffffff))%22%7D");
+    }
+
+    private void getImage(String url) {
         var request = new Request.Builder()
-                .url("https://mura.github.io/meijou-android-sample/gist.json")
+                .url(url)
                 .build();
 
         okHttpClient.newCall(request).enqueue(new Callback() {
@@ -58,17 +70,10 @@ public class MainActivity4 extends AppCompatActivity {
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                // レスポンスボディをGist型に変換
-                var gist = gistJsonAdapter.fromJson(response.body().source());
-
-                Optional.ofNullable(gist)
-                        .map(g -> g.files.get("OkHttp.txt"))
-                        .ifPresent(gistFile -> {
-                            runOnUiThread(() -> {
-                                binding.text.setText(gistFile.content);
-                            });
-                        });
+                var bitmap = BitmapFactory.decodeStream(response.body().byteStream());
+                runOnUiThread(() ->binding.image.setImageBitmap(bitmap));
             }
         });
+        binding.progress.setVisibility(View.INVISIBLE);
     }
 }
